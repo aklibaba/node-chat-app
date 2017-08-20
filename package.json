@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server/server.js",
-    "start-watch": "nodemon server/server.js"
+    "start-watch": "nodemon server/server.js",
+    "test": "mocha server/**/*.test.js",
+    "test-watch": "nodemon --exec 'npm test'"
   },
   "engines": {
     "node": "6.2.2"
@@ -16,5 +17,10 @@
   "dependencies": {
     "express": "latest",
     "socket.io": "latest"
+  },
+  "devDependencies": {
+    "expect": "^1.20.2",
+    "mocha": "^3.0.2",
+    "nodemon": "latest"
   }
 }
