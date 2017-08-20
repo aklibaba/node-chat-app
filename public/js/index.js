@@ -10,12 +10,7 @@ socket.on('disconnect', () => {
 
 
 socket.on('newMessage', data => {
-  console.log(data);
-});
-
-socket.emit('createMessage', {
-  from: 'alvaro.negredo@gmai.com',
-  text: 'Hey I just scored'
+  console.log('newMessage',data);
 });
 
 
