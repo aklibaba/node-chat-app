@@ -14,21 +14,23 @@ function formatTime(timestamp) {
 }
 
 socket.on('newMessage', data => {
-  $('.messages').append(`<li><span class="message-time">${formatTime(data.createdAt)}</span>${data.from}: ${data.text}</li>`);
+  const template = $('#message-template').html();
+  const html = Mustache.render(template, {
+    text: data.text,
+    from: data.from,
+    createdAt: formatTime(data.createdAt)
+  });
+  $('.messages').append(html);
 });
 
 socket.on('newLocationMsg', data => {
-  const li = $('<li>');
-  const a = $('<a target="_blank">My current location</a>');
-  const span = $('<span class="message-time">');
-  span.text(formatTime(data.createdAt));
-  li.append(span);
-  li.append(`${data.from}: `);
-  a.attr('href', data.url);
-  li.append(a);
-
-
-  $('.messages').append(li);
+  const template = $('#location-message-template').html();
+  const html = Mustache.render(template, {
+    from: data.from,
+    createdAt: formatTime(data.createdAt),
+    url: data.url
+  });
+  $('.messages').append(html);
   locationBtn.attr('disabled', false).text('Send location');
 });
 
