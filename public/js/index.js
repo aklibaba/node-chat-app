@@ -9,9 +9,6 @@ socket.on('disconnect', () => {
   console.log('disconnected from server');
 });
 
-function formatTime(timestamp) {
-  return new moment(timestamp).format('h:mm a');
-}
 
 socket.on('newMessage', data => {
   const template = $('#message-template').html();
@@ -21,6 +18,7 @@ socket.on('newMessage', data => {
     createdAt: formatTime(data.createdAt)
   });
   $('.messages').append(html);
+  scrollToBottom();
 });
 
 socket.on('newLocationMsg', data => {
@@ -32,6 +30,7 @@ socket.on('newLocationMsg', data => {
   });
   $('.messages').append(html);
   locationBtn.attr('disabled', false).text('Send location');
+  scrollToBottom();
 });
 
 
