@@ -1,14 +1,32 @@
 const socket = io();
 const locationBtn = $('.send-location');
+const params = $.currentQueryString();
 
 socket.on('connect', () => {
   console.log('connected to server');
+  socket.emit('join', params, err => {
+    if ( err ) {
+      alert(err);
+      window.location = '/';
+    }
+    else {
+      console.log('no error');
+    }
+  });
+
 });
 
 socket.on('disconnect', () => {
   console.log('disconnected from server');
 });
 
+socket.on('updateUserList', userList => {
+  const ol = $('<ol>');
+  userList.forEach( user => {
+    ol.append($('<li>').text(user));
+  });
+  $('.users').html(ol);
+});
 
 socket.on('newMessage', data => {
   const template = $('#message-template').html();
