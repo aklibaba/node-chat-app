@@ -21,7 +21,7 @@ io.on('connection', socket => {
   socket.on('disconnect', () => {
     console.log('Socket disconnected');
     const userThatLeft = users.removeUser(socket.id);
-    if (userThatLeft) {
+    if ( userThatLeft ) {
       io.to(userThatLeft.room).emit('updateUserList', users.getUserList(userThatLeft.room));
       io.to(userThatLeft.room).emit('newMessage', generateMessage('Admin', `${userThatLeft.name} has left the room`));
     }
@@ -45,7 +45,7 @@ io.on('connection', socket => {
     //make sure there is no other user with the same id
     users.removeUser(socket.id);
 
-    //add current user the the user lsit
+    //add current user the the user list
     users.addUser(socket.id, name, room);
 
     io.to(room).emit('updateUserList', users.getUserList(room));
@@ -58,16 +58,22 @@ io.on('connection', socket => {
   });
 
   socket.on('createMessage', (data, callback) => {
-    io.emit('newMessage', generateMessage(data.from, data.text));
-    callback();
+    const user = users.getUser(socket.id);
+    if ( user ) {
+      io.to(user.room).emit('newMessage', generateMessage(user.name, data.text));
+      callback();
+    }
   });
 
   socket.on('createLocationMsg', data => {
-    io.emit('newLocationMsg', generateLocationMsg(
-      'Admin',
-      data.latitude,
-      data.longitude)
-    );
+    const user = users.getUser(socket.id);
+    if ( user ) {
+      io.to(user.room).emit('newLocationMsg', generateLocationMsg(
+        user.name,
+        data.latitude,
+        data.longitude)
+      );
+    }
   });
 });
 
